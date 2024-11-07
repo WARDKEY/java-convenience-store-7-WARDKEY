@@ -126,9 +126,11 @@
     - IllegalArgumentException("[ERROR] 상품을 이어서 입력해주세요.");를 터트리고 입력을 다시 받는다.
   - 고객 구매 입력 시 상품명이 비었을 경우
     - IllegalArgumentException("[ERROR] 상품을 입력해주세요.");를 터트리고 입력을 다시 받는다.
-  - 고객 구매 입력 시 수량이 비었을 경우
+  - 고객 구매 입력 시 수량이 비었거나 0인 경우
     - IllegalArgumentException("[ERROR] 수량을 입력해주세요.");를 터트리고 입력을 다시 받는다.
-  - 고객 구매 입력 시 재고에 없는 상품이거나 재고 수량이 0인 경우
+  - 고객 구매 입력 시 수량을 음수로 입력한 경우
+    - IllegalArgumentException("[ERROR] 수량은 음수로 입력할 수 없습니다.");를 터트리고 입력을 다시 받는다. 
+  - 고객 구매 입력 시 재고에 없는 상품인 경우
     - IllegalArgumentException("[ERROR] 존재하지 않는 상품입니다. 다시 입력해 주세요.");를 터트리고 입력을 다시 받는다.
   - 고객 구매 입력 시 재고 수량보다 많은 경우
     - IllegalArgumentException("[ERROR] 재고 수량을 초과하여 구매할 수 없습니다.");를 터트리고 고객입력을 다시 받는다. 
