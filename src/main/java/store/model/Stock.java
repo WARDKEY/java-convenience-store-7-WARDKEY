@@ -20,6 +20,26 @@ public class Stock {
         return quantity;
     }
 
+    public void addNameAndPrice(Stock stock, StringBuilder builder) {
+        try {
+            int price = Integer.parseInt(stock.getPrice());
+            builder.append("- ").append(stock.getName()).append(" ")
+                    .append(String.format("%,d원", price)).append(" ");
+        } catch (NumberFormatException e) {
+            System.out.println("가격 형식이 잘못되었습니다 : " + stock.getPrice());
+        }
+    }
+
+    public void addQuantity(Stock stock, StringBuilder builder) {
+        if ("재고 없음".equals(stock.getQuantity())) {
+            builder.append(stock.getQuantity());
+        }
+
+        if (!"재고 없음".equals(stock.getQuantity())) {
+            builder.append(stock.getQuantity()).append("개");
+        }
+    }
+
     public String getName() {
         return name;
     }
