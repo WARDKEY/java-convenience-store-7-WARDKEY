@@ -119,9 +119,9 @@
 ## 예외 처리
 - 고객 구매 입력
   - 고객 구매 입력 시 개별 상품이 "\["로 시작하거나 "\]"로 끝나지 않는 경우
-    - IllegalArgumentException("[ERROR] 개별 상품은 대괄호로 묶어서 입력해주세요.");를 터트리고 입력을 다시 받는다.
+    - IllegalArgumentException("[ERROR] 올바르지 않은 형식으로 입력했습니다.");를 터트리고 입력을 다시 받는다.
   - 고객 구매 입력 시 "-"를 입력하지 않은 경우
-    - IllegalArgumentException("[ERROR] 수량은 "-"로 구분하여 입력해주세요.");를 터트리고 입력을 다시 받는다.
+    - IllegalArgumentException("[ERROR] 올바르지 않은 형식으로 입력했습니다.");를 터트리고 입력을 다시 받는다.
   - 고객 구매 입력 시 ","로 끝나는 경우
     - IllegalArgumentException("[ERROR] 상품을 이어서 입력해주세요.");를 터트리고 입력을 다시 받는다.
   - 고객 구매 입력 시 상품명이 비었을 경우
@@ -129,7 +129,9 @@
   - 고객 구매 입력 시 수량이 비었을 경우
     - IllegalArgumentException("[ERROR] 수량을 입력해주세요.");를 터트리고 입력을 다시 받는다.
   - 고객 구매 입력 시 재고에 없는 상품이거나 재고 수량이 0인 경우
-    - IllegalArgumentException("[ERROR] 재고가 존재하지 않습니다.");를 터트리고 입력을 다시 받는다.
+    - IllegalArgumentException("[ERROR] 존재하지 않는 상품입니다. 다시 입력해 주세요.");를 터트리고 입력을 다시 받는다.
+  - 고객 구매 입력 시 재고 수량보다 많은 경우
+    - IllegalArgumentException("[ERROR] 재고 수량을 초과하여 구매할 수 없습니다.");를 터트리고 고객입력을 다시 받는다. 
   - 고객 구매 입력 시 상품 개수를 숫자로 입력하지 않은 경우
     - NumberFormatException("[ERROR] 상품 개수는 숫자를 입력해주세요.");를 터트리고 입력을 다시 받는다.
 
