@@ -1,7 +1,7 @@
 package store.model;
 
 import java.util.Arrays;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -10,7 +10,7 @@ public class Purchase {
     private final String purchase;
 
     public Purchase(String purchase, Products products) {
-        this.purchases = new HashMap<>();
+        this.purchases = new LinkedHashMap<>();
         validatePurchase(purchase, products);
         this.purchase = purchase;
     }
