@@ -40,8 +40,16 @@ public class StoreController {
         }
 
         System.out.println("멤버십 할인을 받으시겠습니까? (Y/N)");
-        String membershipStatus = Console.readLine().trim();
-        Membership membership = new Membership(membershipStatus);
+        while (true) {
+            try {
+                String membershipStatus = Console.readLine().trim();
+                Membership membership = new Membership(membershipStatus);
+                break;
+            } catch (IllegalArgumentException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+
 
     }
 }
