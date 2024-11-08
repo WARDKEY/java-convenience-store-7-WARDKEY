@@ -40,7 +40,7 @@ public class Purchase {
     private void checkPurchase(Products products, List<String> purchaseProducts) {
         for (String purchaseProduct : purchaseProducts) {
             doseNotStartAndEndDelimiter(purchaseProduct);
-            hasNotDelimiter(purchaseProduct);
+            inValidDelimiter(purchaseProduct);
             String productName = purchaseProduct.replaceAll("\\[([^\\-]+)-.*\\]", "$1").trim();
             String productQuantity = purchaseProduct.replaceAll(".*-(\\d+)\\]", "$1").trim();
             products.validProduct(products, productName, productQuantity);
@@ -54,10 +54,15 @@ public class Purchase {
         }
     }
 
-    private void hasNotDelimiter(String purchaseProduct) {
+    private void inValidDelimiter(String purchaseProduct) {
         if (!purchaseProduct.contains("-")) {
             throw new IllegalArgumentException("[ERROR] 올바르지 않은 형식으로 입력했습니다.");
         }
+
+        if (purchaseProduct.indexOf("-") != purchaseProduct.lastIndexOf("-")) {
+            throw new IllegalArgumentException("[ERROR] 올바르지 않은 형식으로 입력했습니다.");
+        }
+
     }
 
     public Map<String, String> getPurchases() {
