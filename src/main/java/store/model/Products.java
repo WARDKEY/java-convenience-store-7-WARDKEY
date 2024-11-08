@@ -14,7 +14,6 @@ public class Products {
         isBlankProductQuantity(productQuantity);
         int quantity = Integer.parseInt(productQuantity);
         isZeroQuantity(quantity);
-        isNegativeQuantity(quantity);
         isNotExistProduct(products, productName);
         isExceedQuantity(products, productName, quantity);
     }
@@ -34,12 +33,6 @@ public class Products {
     private void isZeroQuantity(int quantity) {
         if (quantity == 0) {
             throw new IllegalArgumentException("[ERROR] 수량을 입력해주세요.");
-        }
-    }
-
-    private void isNegativeQuantity(int quantity) {
-        if (quantity < 0) {
-            throw new IllegalArgumentException("[ERROR] 수량은 음수로 입력할 수 없습니다.");
         }
     }
 
