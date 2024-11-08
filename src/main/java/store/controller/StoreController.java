@@ -1,7 +1,9 @@
 package store.controller;
 
+import camp.nextstep.edu.missionutils.Console;
 import store.model.Products;
 import store.model.Promotions;
+import store.model.Purchase;
 import store.util.ProductsFileConverter;
 import store.view.OutputView;
 
@@ -22,5 +24,19 @@ public class StoreController {
         Products products = productsFileConverter.loadProducts();
         Promotions promotions = new Promotions();
         outputView.showProducts(products, promotions);
+        System.out.println("구매하실 상품명과 수량을 입력해 주세요. (예: [사이다-2], [감자칩-1])");
+
+        while (true) {
+            try {
+                String purchaseProducts = Console.readLine().trim();
+                Purchase purchase = new Purchase(purchaseProducts, products);
+                break;
+            } catch (NumberFormatException e) {
+                System.out.println("[ERROR] 상품 개수는 숫자를 입력해주세요.");
+            } catch (IllegalArgumentException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+
     }
 }
