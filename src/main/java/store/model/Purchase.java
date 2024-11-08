@@ -1,75 +1,70 @@
 package store.model;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Purchase {
-    private String productName;
-    private int productQuantity;
+    private final Map<String, String> purchases;
     private final String purchase;
 
     public Purchase(String purchase, Products products) {
+        this.purchases = new HashMap<>();
         validatePurchase(purchase, products);
         this.purchase = purchase;
     }
 
     private void validatePurchase(String purchase, Products products) {
+        hasNotPurchase(purchase);
 
-        if (purchase.isBlank() || purchase == null) {
-            throw new IllegalArgumentException("[ERROR] 상품을 입력해주세요.");
-        }
-
-        if (purchase.endsWith(",")) {
-            throw new IllegalArgumentException("[ERROR] 상품을 이어서 입력해주세요.");
-        }
+        doseNotEnterPurchase(purchase);
 
         List<String> purchaseProducts = Arrays.stream(purchase.split(",")).toList();
 
+        checkPurchase(products, purchaseProducts);
+    }
+
+    private void hasNotPurchase(String purchase) {
+        if (purchase == null || purchase.isBlank()) {
+            throw new IllegalArgumentException("[ERROR] 상품을 입력해주세요.");
+        }
+    }
+
+    private void doseNotEnterPurchase(String purchase) {
+        if (purchase.endsWith(",")) {
+            throw new IllegalArgumentException("[ERROR] 상품을 이어서 입력해주세요.");
+        }
+    }
+
+    private void checkPurchase(Products products, List<String> purchaseProducts) {
         for (String purchaseProduct : purchaseProducts) {
-            if (!(purchaseProduct.startsWith("[") && purchaseProduct.endsWith("]"))) {
-                throw new IllegalArgumentException("[ERROR] 올바르지 않은 형식으로 입력했습니다.");
-            }
-
-            if (!purchaseProduct.contains("-")) {
-                throw new IllegalArgumentException("[ERROR] 올바르지 않은 형식으로 입력했습니다.");
-            }
-
+            doseNotStartAndEndDelimiter(purchaseProduct);
+            hasNotDelimiter(purchaseProduct);
             String productName = purchaseProduct.replaceAll("\\[([^\\-]+)-.*\\]", "$1").trim();
             String productQuantity = purchaseProduct.replaceAll(".*-(\\d+)\\]", "$1").trim();
-
-            if (productName.isBlank()) {
-                throw new IllegalArgumentException("[ERROR] 상품을 입력해주세요.");
-            }
-
-            int quantity;
-            if (productQuantity.isEmpty()) {
-                throw new IllegalArgumentException("[ERROR] 수량을 입력해주세요.");
-            }
-            quantity = Integer.parseInt(productQuantity);
-
-            if (quantity == 0) {
-                throw new IllegalArgumentException("[ERROR] 수량을 입력해주세요.");
-            }
-
-            if (quantity < 0) {
-                throw new IllegalArgumentException("[ERROR] 수량은 음수로 입력할 수 없습니다.");
-            }
-
-            boolean productExists = products.getProducts().stream()
-                    .anyMatch(stock -> stock.getName().equals(productName));
-
-            if (!productExists) {
-                throw new IllegalArgumentException("[ERROR] 존재하지 않는 상품입니다. 다시 입력해 주세요.");
-            }
-
-            products.getProducts().stream()
-                    .filter(stock -> stock.getName().equals(productName))
-                    .findFirst()
-                    .ifPresent(stock -> {
-                        if (quantity > Integer.parseInt(stock.getQuantity())) {
-                            throw new IllegalArgumentException("[ERROR] 재고 수량을 초과하여 구매할 수 없습니다.");
-                        }
-                    });
+            products.validProduct(products, productName, productQuantity);
+            purchases.put(productName, productQuantity);
         }
+    }
+
+    private void doseNotStartAndEndDelimiter(String purchaseProduct) {
+        if (!(purchaseProduct.startsWith("[") && purchaseProduct.endsWith("]"))) {
+            throw new IllegalArgumentException("[ERROR] 올바르지 않은 형식으로 입력했습니다.");
+        }
+    }
+
+    private void hasNotDelimiter(String purchaseProduct) {
+        if (!purchaseProduct.contains("-")) {
+            throw new IllegalArgumentException("[ERROR] 올바르지 않은 형식으로 입력했습니다.");
+        }
+    }
+
+    public Map<String, String> getPurchases() {
+        return purchases;
+    }
+
+    public String getPurchase() {
+        return purchase;
     }
 }
