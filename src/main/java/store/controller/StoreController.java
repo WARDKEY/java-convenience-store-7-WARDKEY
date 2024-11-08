@@ -1,6 +1,7 @@
 package store.controller;
 
 import camp.nextstep.edu.missionutils.Console;
+import store.model.Membership;
 import store.model.Products;
 import store.model.Promotions;
 import store.model.Purchase;
@@ -37,6 +38,10 @@ public class StoreController {
                 System.out.println(e.getMessage());
             }
         }
+
+        System.out.println("멤버십 할인을 받으시겠습니까? (Y/N)");
+        String membershipStatus = Console.readLine().trim();
+        Membership membership = new Membership(membershipStatus);
 
     }
 }
