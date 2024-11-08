@@ -5,7 +5,8 @@ import store.model.Membership;
 import store.model.Products;
 import store.model.Promotions;
 import store.model.Purchase;
-import store.util.ProductsFileConverter;
+import store.util.file.ProductsFileConverter;
+import store.util.file.PromotionsFileConverter;
 import store.view.OutputView;
 
 public class StoreController {
@@ -22,8 +23,11 @@ public class StoreController {
     private void start() {
         outputView.showStartComment();
         ProductsFileConverter productsFileConverter = new ProductsFileConverter();
-        Products products = productsFileConverter.loadProducts();
-        Promotions promotions = new Promotions();
+        Products products = (Products) productsFileConverter.loadFile();
+
+        PromotionsFileConverter promotionsFileConverter = new PromotionsFileConverter();
+        Promotions promotions = (Promotions) promotionsFileConverter.loadFile();
+
         outputView.showProducts(products, promotions);
         System.out.println("구매하실 상품명과 수량을 입력해 주세요. (예: [사이다-2], [감자칩-1])");
 

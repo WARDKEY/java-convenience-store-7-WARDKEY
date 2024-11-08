@@ -1,4 +1,4 @@
-package store.util;
+package store.util.file;
 
 import store.model.Products;
 import store.model.Stock;
@@ -12,32 +12,30 @@ import java.util.List;
 
 public class ProductsFileConverter {
 
-    public Products loadProducts() {
+    public Products loadFile() {
         List<Stock> stocks = new ArrayList<>();
-
-        try (BufferedReader buffer = new BufferedReader(new FileReader(FilePath.PRODUCTS_FILE_PATH.getFilePath()))) {
-            skipHeader(buffer);
-            convertProductLine(buffer, stocks);
+        try (BufferedReader reader = new BufferedReader(new FileReader(FilePath.PRODUCTS_FILE_PATH.getFilePath()))) {
+            skipHeader(reader);
+            convertLine(reader, stocks);
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
-
         return new Products(stocks);
     }
 
-    private void skipHeader(BufferedReader buffer) throws IOException {
-        buffer.readLine();
+    private void skipHeader(BufferedReader reader) throws IOException {
+        reader.readLine();
     }
 
-    private void convertProductLine(BufferedReader br, List<Stock> stocks) throws IOException {
+    private void convertLine(BufferedReader reader, List<Stock> stocks) throws IOException {
         String line;
-        while ((line = br.readLine()) != null) {
+        while ((line = reader.readLine()) != null) {
             String[] values = line.split(",");
-            saveStocks(stocks, values);
+            save(stocks, values);
         }
     }
 
-    private void saveStocks(List<Stock> stocks, String[] values) {
+    private void save(List<Stock> stocks, String[] values) {
         if (values.length == 4) {
             String name = values[0];
             String price = values[1];

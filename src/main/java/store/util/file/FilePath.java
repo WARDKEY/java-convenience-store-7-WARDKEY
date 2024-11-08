@@ -1,4 +1,4 @@
-package store.util;
+package store.util.file;
 
 public enum FilePath {
     PRODUCTS_FILE_PATH("src/main/resources/products.md"),
