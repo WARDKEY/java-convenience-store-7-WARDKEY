@@ -10,6 +10,13 @@ public class Promotions {
         this.promotions = promotions;
     }
 
+    public Discount findPromotionByStock(Stock stock) {
+        return promotions.stream()
+                .filter(discount -> discount.getName().equals(stock.getPromotion()))
+                .findFirst()
+                .orElse(null);
+    }
+
     public void addPromotion(Stock stock, StringBuilder builder) {
         if (stock.getPromotion() != null) {
             builder.append(" ").append(stock.getPromotion());
