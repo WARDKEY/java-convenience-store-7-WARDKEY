@@ -3,14 +3,15 @@ package store.model;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 public class Purchase {
-    private final Map<String, String> purchases;
+    private final LinkedHashMap<String, String> purchases;
+    private final LinkedHashMap<String, Integer> freeProducts;
     private final String purchase;
 
     public Purchase(String purchase, Products products) {
         this.purchases = new LinkedHashMap<>();
+        this.freeProducts = new LinkedHashMap<>();
         validatePurchase(purchase, products);
         this.purchase = purchase;
     }
@@ -65,8 +66,22 @@ public class Purchase {
 
     }
 
-    public Map<String, String> getPurchases() {
+    public void updateQuantity(String productName, int quantity) {
+        if (purchases.containsKey(productName)) {
+            purchases.put(productName, String.valueOf(quantity));
+        }
+    }
+
+    public void addFreeProducts(String productName, int quantity) {
+        freeProducts.put(productName, freeProducts.getOrDefault(productName, 0) + quantity);
+    }
+
+    public LinkedHashMap<String, String> getPurchases() {
         return purchases;
+    }
+
+    public LinkedHashMap<String, Integer> getFreeProducts() {
+        return freeProducts;
     }
 
     public String getPurchase() {
