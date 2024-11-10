@@ -11,6 +11,9 @@ import store.view.OutputView;
 
 public class StoreController {
     private final OutputView outputView;
+    private Purchase purchase;
+    private Products products;
+    private Promotions promotions;
 
     public StoreController(OutputView outputView) {
         this.outputView = outputView;
@@ -22,28 +25,17 @@ public class StoreController {
 
     private void start() {
         outputView.showStartComment();
-        ProductsFileConverter productsFileConverter = new ProductsFileConverter();
-        Products products = (Products) productsFileConverter.loadFile();
+        loadProducts();
 
-        PromotionsFileConverter promotionsFileConverter = new PromotionsFileConverter();
-        Promotions promotions = (Promotions) promotionsFileConverter.loadFile();
+        loadPromotions();
 
         outputView.showProducts(products, promotions);
-        System.out.println("구매하실 상품명과 수량을 입력해 주세요. (예: [사이다-2], [감자칩-1])");
 
-        while (true) {
-            try {
-                String purchaseProducts = Console.readLine().trim();
-                Purchase purchase = new Purchase(purchaseProducts, products);
-                break;
-            } catch (NumberFormatException e) {
-                System.out.println("[ERROR] 상품 개수는 숫자를 입력해주세요.");
-            } catch (IllegalArgumentException e) {
-                System.out.println(e.getMessage());
-            }
-        }
+        outputView.showRequestProductAndQuantity();
 
-        System.out.println("멤버십 할인을 받으시겠습니까? (Y/N)");
+        getPurchaseInput();
+
+        outputView.showRequestMembership();
         while (true) {
             try {
                 String membershipStatus = Console.readLine().trim();
@@ -55,5 +47,31 @@ public class StoreController {
         }
 
 
+    }
+
+    private void getPurchaseInput() {
+        while (true) {
+            try {
+                String purchaseProducts = Console.readLine().trim();
+                purchase = new Purchase(purchaseProducts, products);
+                break;
+            } catch (NumberFormatException e) {
+                System.out.println("[ERROR] 상품 개수는 숫자를 입력해주세요.");
+            } catch (IllegalArgumentException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    }
+
+    private Promotions loadPromotions() {
+        PromotionsFileConverter promotionsFileConverter = new PromotionsFileConverter();
+        Promotions promotions = promotionsFileConverter.loadFile();
+        return promotions;
+    }
+
+    private Products loadProducts() {
+        ProductsFileConverter productsFileConverter = new ProductsFileConverter();
+        Products products = productsFileConverter.loadFile();
+        return products;
     }
 }
