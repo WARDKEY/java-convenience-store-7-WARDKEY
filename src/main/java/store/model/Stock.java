@@ -2,13 +2,13 @@ package store.model;
 
 public class Stock {
     private final String name;
-    private final String price;
-    private final String quantity;
+    private final int price;
+    private String quantity;
     private final String promotion;
 
     public Stock(String name, String price, String quantity, String promotion) {
         this.name = name;
-        this.price = price;
+        this.price = Integer.parseInt(price);
         this.quantity = checkQuantity(quantity);
         this.promotion = promotion;
     }
@@ -22,7 +22,7 @@ public class Stock {
 
     public void addNameAndPrice(Stock stock, StringBuilder builder) {
         try {
-            int price = Integer.parseInt(stock.getPrice());
+            int price = stock.getPrice();
             builder.append("- ").append(stock.getName()).append(" ")
                     .append(String.format("%,d원", price)).append(" ");
         } catch (NumberFormatException e) {
@@ -40,11 +40,17 @@ public class Stock {
         }
     }
 
+    public void reduceStock(int requestedQuantity){
+        int stockQuantity = Integer.parseInt(quantity);
+        stockQuantity -= requestedQuantity;
+        quantity = String.valueOf(stockQuantity);
+    }
+
     public String getName() {
         return name;
     }
 
-    public String getPrice() {
+    public int getPrice() {
         return price;
     }
 
