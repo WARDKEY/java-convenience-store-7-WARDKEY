@@ -22,6 +22,7 @@ public class StoreController {
     private Purchase purchase;
     private Products products;
     private Promotions promotions;
+    private Membership membership;
 
     public StoreController(OutputView outputView, InputView inputView) {
         this.outputView = outputView;
@@ -34,6 +35,7 @@ public class StoreController {
 
     private void start() {
         outputView.showStartComment();
+
         loadProducts();
 
         loadPromotions();
@@ -50,6 +52,35 @@ public class StoreController {
 
         getMembershipInput();
 
+    }
+
+    // 상품 파일 로드
+    private Products loadProducts() {
+        ProductsFileConverter productsFileConverter = new ProductsFileConverter();
+        products = productsFileConverter.loadFile();
+        return products;
+    }
+
+    // 프로모션 파일 로드
+    private Promotions loadPromotions() {
+        PromotionsFileConverter promotionsFileConverter = new PromotionsFileConverter();
+        promotions = promotionsFileConverter.loadFile();
+        return promotions;
+    }
+
+    // 상품 구매 입력
+    private void getPurchaseInput() {
+        while (true) {
+            try {
+                String purchaseProducts = Console.readLine().trim();
+                purchase = new Purchase(purchaseProducts, products);
+                break;
+            } catch (NumberFormatException e) {
+                System.out.println("[ERROR] 상품 개수는 숫자를 입력해주세요.");
+            } catch (IllegalArgumentException e) {
+                System.out.println(e.getMessage());
+            }
+        }
     }
 
     private void validatePromotions() {
@@ -184,39 +215,10 @@ public class StoreController {
         }
     }
 
-    // 상품 구매 입력
-
-    private void getPurchaseInput() {
-        while (true) {
-            try {
-                String purchaseProducts = Console.readLine().trim();
-                purchase = new Purchase(purchaseProducts, products);
-                break;
-            } catch (NumberFormatException e) {
-                System.out.println("[ERROR] 상품 개수는 숫자를 입력해주세요.");
-            } catch (IllegalArgumentException e) {
-                System.out.println(e.getMessage());
-            }
-        }
-    }
-    // 프로모션 파일 로드
-
-    private Promotions loadPromotions() {
-        PromotionsFileConverter promotionsFileConverter = new PromotionsFileConverter();
-        promotions = promotionsFileConverter.loadFile();
-        return promotions;
-    }
-    // 상품 파일 로드
-
-    private Products loadProducts() {
-        ProductsFileConverter productsFileConverter = new ProductsFileConverter();
-        products = productsFileConverter.loadFile();
-        return products;
-    }
-
     // 멤버십 할인 여부 입력
     private void getMembershipInput() {
         replyStatus membershipstatus = inputView.getMembershipReply();
-        Membership membership = new Membership(membershipstatus);
+        membership = new Membership(membershipstatus);
     }
+
 }
