@@ -44,19 +44,11 @@ public class StoreController {
 
         getPurchaseInput();
 
-        outputView.showRequestMembership();
-
         validatePromotions();
 
-        while (true) {
-            try {
-                String membershipStatus = Console.readLine().trim();
-                Membership membership = new Membership(membershipStatus);
-                break;
-            } catch (IllegalArgumentException e) {
-                System.out.println(e.getMessage());
-            }
-        }
+        outputView.showRequestMembership();
+
+        getMembershipInput();
 
     }
 
@@ -193,6 +185,7 @@ public class StoreController {
     }
 
     // 상품 구매 입력
+
     private void getPurchaseInput() {
         while (true) {
             try {
@@ -206,18 +199,24 @@ public class StoreController {
             }
         }
     }
-
     // 프로모션 파일 로드
+
     private Promotions loadPromotions() {
         PromotionsFileConverter promotionsFileConverter = new PromotionsFileConverter();
         promotions = promotionsFileConverter.loadFile();
         return promotions;
     }
-
     // 상품 파일 로드
+
     private Products loadProducts() {
         ProductsFileConverter productsFileConverter = new ProductsFileConverter();
         products = productsFileConverter.loadFile();
         return products;
+    }
+
+    // 멤버십 할인 여부 입력
+    private void getMembershipInput() {
+        replyStatus membershipstatus = inputView.getMembershipReply();
+        Membership membership = new Membership(membershipstatus);
     }
 }

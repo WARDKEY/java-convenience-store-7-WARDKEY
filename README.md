@@ -158,28 +158,28 @@
 
 - 프로모션 수량 추가 여부 입력
     - [ ] 프로모션 수량 추가 여부 입력 시 "Y"또는 "N"이 아닌 다른 값을 입력한 경우
-        - IllegalArgumentException("[ERROR] "Y"또는 "N"을 입력해주세요.");를 터트리고 입력을 다시 받는다.
+        - IllegalArgumentException("[ERROR] 프로모션 수량 추가 여부는 "Y"또는 "N"을 입력해주세요.");를 터트리고 입력을 다시 받는다.
     - [ ] 프로모션 수량 추가 여부 입력 시 공백을 입력한 경우
         - IllegalArgumentException("[ERROR] 프로모션 추가 여부를 입력해주세요.");를 터트리고 입력을 다시 받는다.
 
 
 - 일부 수량 결제 여부 입력
     - [ ] 일부 수량 결제 여부 입력 시 "Y"또는 "N"이 아닌 다른 값을 입력한 경우
-        - IllegalArgumentException("[ERROR] "Y"또는 "N"을 입력해주세요.");를 터트리고 입력을 다시 받는다.
+        - IllegalArgumentException("[ERROR] 일부 수량 결제 여부는 "Y"또는 "N"을 입력해주세요.");를 터트리고 입력을 다시 받는다.
     - [ ] 일부 수량 결제 여부 입력 시 공백을 입력한 경우
         - IllegalArgumentException("[ERROR] 일부 수량 결제 여부를 입력해주세요.");를 터트리고 입력을 다시 받는다.
 
 
 - 멤버십 할인 여부 입력
     - [x] 멤버십 할인 여부 입력 시 "Y"또는 "N"이 아닌 다른 값을 입력한 경우
-        - IllegalArgumentException("[ERROR] "Y"또는 "N"을 입력해주세요.");를 터트리고 입력을 다시 받는다.
+        - IllegalArgumentException("[ERROR] 멤버십 할인 여부는 "Y"또는 "N"을 입력해주세요.");를 터트리고 입력을 다시 받는다.
     - [x] 멤버십 할인 여부 입력 시 공백을 입력한 경우
         - IllegalArgumentException("[ERROR] 멤버십 할인 여부를 입력해주세요.");를 터트리고 입력을 다시 받는다.
 
 
 - 추가 구매 여부 입력
     - [ ] 추가 구매 여부 입력 시 "Y"또는 "N"이 아닌 다른 값을 입력한 경우
-        - IllegalArgumentException("[ERROR] "Y"또는 "N"을 입력해주세요.");를 터트리고 입력을 다시 받는다.
+        - IllegalArgumentException("[ERROR] 추가 구매 여부는 "Y"또는 "N"을 입력해주세요.");를 터트리고 입력을 다시 받는다.
     - [ ] 추가 구매 여부 입력 시 공백을 입력한 경우
         - IllegalArgumentException("[ERROR] 추가 구매 여부를 입력해주세요.");를 터트리고 입력을 다시 받는다.
 

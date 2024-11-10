@@ -14,6 +14,10 @@ public class InputView {
         return getYesOrNoInput("[ERROR] 일부 수량 결제 여부를 입력해주세요.", "[ERROR] 일부 수량 결제 여부는 \"Y\"또는 \"N\"을 입력해주세요.");
     }
 
+    public replyStatus getMembershipReply(){
+        return getYesOrNoInput("[ERROR] 멤버십 할인 여부를 입력해주세요.", "[ERROR] 멤버십 할인 여부는 \"Y\"또는 \"N\"을 입력해주세요.");
+    }
+
     private replyStatus getYesOrNoInput(String blankMessage, String invalidMessage) {
         while (true) {
             try {
