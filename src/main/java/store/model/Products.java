@@ -18,6 +18,12 @@ public class Products {
         isExceedQuantity(products, productName, quantity);
     }
 
+    public List<Stock> findStocksByName(String productName) {
+        return products.stream()
+                .filter(stock -> stock.getName().equals(productName))
+                .toList();
+    }
+
     private void isBlankProductName(String productName) {
         if (productName.isBlank()) {
             throw new IllegalArgumentException("[ERROR] 상품을 입력해주세요.");
