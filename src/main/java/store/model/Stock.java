@@ -3,13 +3,13 @@ package store.model;
 public class Stock {
     private final String name;
     private final int price;
-    private String quantity;
+    private int quantity;
     private final String promotion;
 
     public Stock(String name, String price, String quantity, String promotion) {
         this.name = name;
         this.price = Integer.parseInt(price);
-        this.quantity = checkQuantity(quantity);
+        this.quantity = Integer.parseInt(quantity);
         this.promotion = promotion;
     }
 
@@ -31,19 +31,15 @@ public class Stock {
     }
 
     public void addQuantity(Stock stock, StringBuilder builder) {
-        if ("재고 없음".equals(stock.getQuantity())) {
-            builder.append(stock.getQuantity());
-        }
-
-        if (!"재고 없음".equals(stock.getQuantity())) {
-            builder.append(stock.getQuantity()).append("개");
-        }
+        String quantityStr = stock.getQuantitytoString();
+        builder.append(quantityStr);
     }
 
-    public void reduceStock(int requestedQuantity){
-        int stockQuantity = Integer.parseInt(quantity);
-        stockQuantity -= requestedQuantity;
-        quantity = String.valueOf(stockQuantity);
+    public void reduceStock(int requestedQuantity) {
+        if (quantity < requestedQuantity) {
+            throw new IllegalArgumentException("[ERROR] 재고 수량을 초과하여 구매할 수 없습니다.");
+        }
+        quantity -= requestedQuantity;
     }
 
     public String getName() {
@@ -54,7 +50,14 @@ public class Stock {
         return price;
     }
 
-    public String getQuantity() {
+    public String getQuantitytoString() {
+        if (quantity == 0) {
+            return "재고 없음";
+        }
+        return quantity + "개";
+    }
+
+    public int getQuantity() {
         return quantity;
     }
 

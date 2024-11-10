@@ -9,6 +9,7 @@ import store.model.Membership;
 import store.model.Products;
 import store.model.Promotions;
 import store.model.Purchase;
+import store.model.Receipt;
 import store.model.Stock;
 import store.model.replyStatus;
 import store.util.file.ProductsFileConverter;
@@ -30,7 +31,12 @@ public class StoreController {
     }
 
     public void run() {
-        start();
+        while (true) {
+            start();
+            if (!handleContinueShopping()) {
+                break;
+            }
+        }
     }
 
     private void start() {
@@ -51,6 +57,9 @@ public class StoreController {
         outputView.showRequestMembership();
 
         getMembershipInput();
+
+        Receipt receipt = new Receipt(purchase, products, promotions, membership.isMember());
+        outputView.showReceipt(receipt);
 
     }
 
@@ -91,7 +100,10 @@ public class StoreController {
             Discount applicableDiscount = findApplicableDiscount(stocks, today); // 적용 가능한 할인 찾음
             if (applicableDiscount != null) {
                 handleProductPromotion(applicableDiscount, stocks, productName, quantity); // 할인 적용
+                return;
             }
+
+            reduceStockWithoutPromotion(stocks, quantity);
         });
     }
 
@@ -145,7 +157,7 @@ public class StoreController {
         for (Stock stock : stocks) {
             if (stock.getPromotion().equals(discount.getName())) {
                 int discountedQuantityFromPromotion = Math.min(totalDiscountedQuantity,
-                        Integer.parseInt(stock.getQuantity())); // 프로모션 재고에서 할인 가능한 수량
+                        stock.getQuantity()); // 프로모션 재고에서 할인 가능한 수량
                 stock.reduceStock(discountedQuantityFromPromotion); // 재고 감소
                 purchase.addFreeProducts(productName, discountedQuantityFromPromotion); // 무료 상품 추가
                 totalDiscountedQuantity -= discountedQuantityFromPromotion; // 남은 할인 수량 갱신
@@ -156,9 +168,9 @@ public class StoreController {
         // 프로모션 재고가 부족할 경우 일반 재고에서 추가 할인 적용
         if (totalDiscountedQuantity > 0) {
             for (Stock stock : stocks) {
-                if (stock.getPromotion().isEmpty()) { // 일반 재고인 경우
-                    if (totalDiscountedQuantity > Integer.parseInt(stock.getQuantity())) {
-                        throw new IllegalArgumentException("[ERROR] 재고 수량을 초과하여 구매할 수 없습니다.");
+                if (stock.getPromotion() == null) { // 일반 재고인 경우
+                    if (totalDiscountedQuantity > stock.getQuantity()) {
+                        throw new IllegalArgumentException("[ERROR] 재고 수량을 초과하여 구매할 수 없습니다. 다시 입력해 주세요.");
                     }
                     stock.reduceStock(totalDiscountedQuantity); // 재고 감소
                     purchase.addFreeProducts(productName, totalDiscountedQuantity); // 무료 상품 추가
@@ -169,46 +181,45 @@ public class StoreController {
         }
 
         int remainingQuantity = quantity - (applicablePromotionCount * requiredQuantity); // 남은 구매 수량 계산
-        handlePartialPayment(stocks, productName, remainingQuantity); // 남은 수량 결제 처리함
-        int finalQuantity = quantity + purchase.getFreeProducts().getOrDefault(productName, 0); // 최종 구매 수량 계산
+        handlePartialPayment(stocks, productName, remainingQuantity, discount); // 남은 수량 결제 처리함
+        int finalQuantity = quantity;  // 최종 구매 수량
         purchase.updateQuantity(productName, finalQuantity); // 구매 내역 업데이트
     }
 
-    private void handlePartialPayment(List<Stock> stocks, String productName, int remainingQuantity) {
+    private void handlePartialPayment(List<Stock> stocks, String productName, int remainingQuantity,
+                                      Discount discount) {
         if (remainingQuantity <= 0) { // 남은 수량이 없으면 종료
             return;
         }
 
         // 일반 재고의 총 수량 계산
         int totalGeneralStock = stocks.stream()
-                .filter(stock -> stock.getPromotion().isEmpty())
-                .mapToInt(quantity -> Integer.parseInt(quantity.getQuantity()))
+                .filter(stock -> stock.getPromotion() == null)
+                .mapToInt(Stock::getQuantity)
                 .sum();
 
         if (remainingQuantity > totalGeneralStock) { // 일반 재고가 부족한 경우
-            throw new IllegalArgumentException("[ERROR] 재고 수량을 초과하여 구매할 수 없습니다.");
+            throw new IllegalArgumentException("[ERROR] 재고 수량을 초과하여 구매할 수 없습니다. 다시 입력해 주세요.");
         }
 
         // 사용자에게 부분 결제 여부 묻기
         outputView.showRequestPartialPayment(productName, remainingQuantity);
         replyStatus reply = inputView.partialPaymentReply();
+
         if (reply == replyStatus.N) { // 'N' 선택 시 프로모션 조건을 만족하는 만큼만 구매
-            Discount discount = findApplicableDiscount(stocks, LocalDate.now());
-            if (discount != null) {
-                int applicablePromotionSets = remainingQuantity / Integer.parseInt(discount.getBuy());
-                int updatedQuantity = applicablePromotionSets * Integer.parseInt(discount.getBuy());
-                purchase.updateQuantity(productName, updatedQuantity); // 구매 내역 업데이트
-            }
+            int applicablePromotionSets = remainingQuantity / Integer.parseInt(discount.getBuy());
+            int updatedQuantity = applicablePromotionSets * Integer.parseInt(discount.getBuy());
+            purchase.updateQuantity(productName, updatedQuantity); // 구매 내역 업데이트
             return;
         }
 
         // 'Y' 선택 시 일반 재고에서 남은 수량을 구매
         for (Stock stock : stocks) {
-            if (stock.getPromotion().isEmpty()) { // 일반 재고인 경우
+            if (stock.getPromotion() == null) { // 일반 재고인 경우
                 if (remainingQuantity <= 0) { // 구매할 수량이 없으면 종료
                     break;
                 }
-                int purchasable = Math.min(remainingQuantity, Integer.parseInt(stock.getQuantity()));
+                int purchasable = Math.min(remainingQuantity, stock.getQuantity());
                 stock.reduceStock(purchasable);
                 remainingQuantity -= purchasable;
             }
@@ -219,6 +230,30 @@ public class StoreController {
     private void getMembershipInput() {
         replyStatus membershipstatus = inputView.getMembershipReply();
         membership = new Membership(membershipstatus);
+    }
+
+    // 프로모션이 없을 때 재고 감소함
+    private void reduceStockWithoutPromotion(List<Stock> stocks, int quantity) {
+        int remainingQuantity = quantity;
+        for (Stock stock : stocks) {
+            int stockQuantity = stock.getQuantity();
+            int purchasable = Math.min(remainingQuantity, stockQuantity);
+            stock.reduceStock(purchasable);
+            remainingQuantity -= purchasable;
+            if (remainingQuantity == 0) {
+                break;
+            }
+        }
+    }
+
+    // 추가 구매 여부 처리
+    private boolean handleContinueShopping() {
+        outputView.showRequestContinueShopping();
+        replyStatus reply = inputView.getContinueShoppingReply();
+        if (reply == replyStatus.Y) {
+            return true;
+        }
+        return false;
     }
 
 }
