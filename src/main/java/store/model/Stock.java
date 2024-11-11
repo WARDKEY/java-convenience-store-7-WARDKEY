@@ -10,7 +10,15 @@ public class Stock {
         this.name = name;
         this.price = Integer.parseInt(price);
         this.quantity = Integer.parseInt(quantity);
+        promotion = isPromotionNull(promotion);
         this.promotion = promotion;
+    }
+
+    private String isPromotionNull(String promotion) {
+        if ("null".equals(promotion)) {
+            promotion = null;
+        }
+        return promotion;
     }
 
     public void addNameAndPrice(Stock stock, StringBuilder builder) {

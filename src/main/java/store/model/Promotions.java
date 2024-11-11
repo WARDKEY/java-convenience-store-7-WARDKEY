@@ -23,9 +23,10 @@ public class Promotions {
         }
     }
 
-    public boolean isPromotionProduct(String productName) {
-        return promotions.stream()
-                .anyMatch(discount -> discount.getName().equals(productName));
+    public boolean isPromotionProduct(String productName, Products products) {
+        return products.findStocksByName(productName).stream()
+                .anyMatch(stock -> stock.getPromotion() != null && promotions.stream()
+                        .anyMatch(discount -> discount.getName().equals(stock.getPromotion())));
     }
 
     public List<Discount> getPromotions() {

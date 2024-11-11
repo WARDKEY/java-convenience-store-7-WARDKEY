@@ -114,35 +114,40 @@ public class StoreController {
     private void handleProductPromotion(Discount discount, List<Stock> stocks, String productName, int quantity) {
         int buyQuantity = Integer.parseInt(discount.getBuy());
         int additionalQuantity = Integer.parseInt(discount.getGet());
-
         int totalRequiredQuantity = buyQuantity + additionalQuantity;
 
         if (quantity >= totalRequiredQuantity) {
             int promotionCount = quantity / totalRequiredQuantity;
-            int freeProducts = promotionCount * additionalQuantity;
+            int totalPromotionQuantity = promotionCount * totalRequiredQuantity;
             int availablePromotionStock = getAvailablePromotionStock(stocks, discount.getName());
-            int addtionalFreeProudctsCount = Math.min(freeProducts, availablePromotionStock);
 
-            if (addtionalFreeProudctsCount > 0) {
-                reducePromotionStock(stocks, discount.getName(), addtionalFreeProudctsCount);
-                purchase.addFreeProducts(productName, addtionalFreeProudctsCount);
-            }
-
-            int totalPromotionApplied = promotionCount * buyQuantity;
-            reduceGeneralStock(stocks, totalPromotionApplied);
-
-            if (addtionalFreeProudctsCount < freeProducts) {
-                int remainingFreeItems = freeProducts - addtionalFreeProudctsCount;
-                outputView.showRequestPartialPayment(productName, remainingFreeItems);
-                replyStatus partialReply = inputView.invalidReply();
-
-                if (partialReply == replyStatus.Y) {
-                    reduceGeneralStock(stocks, remainingFreeItems);
-                }
-
+            if (availablePromotionStock >= totalPromotionQuantity) {
+                reducePromotionStock(stocks, discount.getName(), totalPromotionQuantity);
+                int freeProducts = promotionCount * additionalQuantity;
+                purchase.addFreeProducts(productName, freeProducts);
                 return;
             }
 
+            reducePromotionStock(stocks, discount.getName(), availablePromotionStock);
+            int remainingQuantity = totalPromotionQuantity - availablePromotionStock;
+
+            reduceGeneralStock(stocks, remainingQuantity);
+
+            int fullPromotionSetsFromPromotionStock = availablePromotionStock / totalRequiredQuantity;
+            int freeProductsFromPromotionStock = fullPromotionSetsFromPromotionStock * additionalQuantity;
+            purchase.addFreeProducts(productName, freeProductsFromPromotionStock);
+
+            int totalFreeProducts = promotionCount * additionalQuantity;
+            int remainingFreeProducts = totalFreeProducts - freeProductsFromPromotionStock;
+
+            if (remainingFreeProducts > 0) {
+                outputView.showRequestPartialPayment(productName, remainingFreeProducts);
+                replyStatus partialReply = inputView.invalidReply();
+
+                if (partialReply == replyStatus.Y) {
+                    reduceGeneralStock(stocks, remainingFreeProducts);
+                }
+            }
             return;
         }
 
@@ -161,17 +166,35 @@ public class StoreController {
             }
 
             if (reply == replyStatus.Y) {
-                purchase.updateQuantity(productName, quantity + missingGetCount);
+                int newQuantity = quantity + missingGetCount;
+                purchase.updateQuantity(productName, newQuantity);
 
+                int totalPromotionQuantity = newQuantity;
                 int availablePromotionStock = getAvailablePromotionStock(stocks, discount.getName());
-                int additionalFreeProducts = Math.min(additionalQuantity, availablePromotionStock);
 
-                if (additionalFreeProducts > 0) {
-                    reducePromotionStock(stocks, discount.getName(), additionalFreeProducts);
-                    purchase.addFreeProducts(productName, additionalFreeProducts);
+                if (availablePromotionStock >= totalPromotionQuantity) {
+                    reducePromotionStock(stocks, discount.getName(), totalPromotionQuantity);
+                    purchase.addFreeProducts(productName, additionalQuantity);
+                    return;
                 }
 
-                reduceGeneralStock(stocks, buyQuantity);
+                reducePromotionStock(stocks, discount.getName(), availablePromotionStock);
+                int remainingQuantity = totalPromotionQuantity - availablePromotionStock;
+                reduceGeneralStock(stocks, remainingQuantity);
+
+                int freeProductsFromPromotionStock =
+                        (availablePromotionStock / totalRequiredQuantity) * additionalQuantity;
+                purchase.addFreeProducts(productName, freeProductsFromPromotionStock);
+
+                int remainingFreeProducts = additionalQuantity - freeProductsFromPromotionStock;
+                if (remainingFreeProducts > 0) {
+                    outputView.showRequestPartialPayment(productName, remainingFreeProducts);
+                    replyStatus partialReply = inputView.invalidReply();
+
+                    if (partialReply == replyStatus.Y) {
+                        reduceGeneralStock(stocks, remainingFreeProducts);
+                    }
+                }
                 return;
             }
             reduceGeneralStock(stocks, quantity);
