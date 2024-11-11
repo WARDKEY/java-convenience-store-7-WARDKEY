@@ -37,6 +37,10 @@ public class InputView {
         if (input.isBlank()) {
             throw new IllegalArgumentException(blankMessage);
         }
-        return replyStatus.fromString(input);
+        replyStatus status = replyStatus.fromString(input);
+        if (status == null) {
+            throw new IllegalArgumentException(invalidMessage);
+        }
+        return status;
     }
 }
