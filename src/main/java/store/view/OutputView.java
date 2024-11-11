@@ -6,6 +6,7 @@ import store.model.Receipt;
 
 public class OutputView {
     public void showStartComment() {
+        System.out.println();
         System.out.println("안녕하세요 W편의점입니다.");
         System.out.println("현재 보유하고 있는 상품입니다.");
         System.out.println();
@@ -51,11 +52,11 @@ public class OutputView {
         receipt.getPurchasedProducts().forEach((productName, quantity) -> {
             int price = receipt.getProductPrices().get(productName);
             int totalPrice = price * quantity;
-            System.out.printf("%s\t\t\t\t\t%d\t\t%,d%n", productName, quantity, totalPrice);
+            System.out.printf("%s\t\t\t\t%d\t\t%,d%n", productName, quantity, totalPrice);
         });
         System.out.println("=============증\t\t정===============");
         receipt.getFreeProducts().forEach((productName, quantity) -> {
-            System.out.printf("%s\t\t\t\t\t%d%n", productName, quantity);
+            System.out.printf("%s\t\t\t\t%d%n", productName, quantity);
         });
         System.out.println("====================================");
         System.out.printf("총구매액\t\t\t\t%d\t\t%,d%n",
