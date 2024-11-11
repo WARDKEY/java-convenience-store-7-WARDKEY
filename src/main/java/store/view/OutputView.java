@@ -44,25 +44,26 @@ public class OutputView {
         System.out.printf("현재 %s은(는) %d개를 무료로 더 받을 수 있습니다. 추가하시겠습니까? (Y/N)%n", productName, additionalQuantity);
     }
 
-    public void showReceipt(Receipt receipt) { // 추가됨
-        System.out.println("=============W 편의점================");
-        System.out.println("상품명\t\t수량\t금액");
+    public void showReceipt(Receipt receipt) {
+        System.out.println();
+        System.out.println("==============W 편의점================");
+        System.out.println("상품명\t\t\t\t수량\t\t금액");
         receipt.getPurchasedProducts().forEach((productName, quantity) -> {
             int price = receipt.getProductPrices().get(productName);
             int totalPrice = price * quantity;
-            System.out.printf("%s\t\t%d\t%,d%n", productName, quantity, totalPrice);
+            System.out.printf("%s\t\t\t\t%d\t\t%,d%n", productName, quantity, totalPrice);
         });
-        System.out.println("============증\t정===============");
+        System.out.println("=============증\t\t정===============");
         receipt.getFreeProducts().forEach((productName, quantity) -> {
-            System.out.printf("%s\t\t%d%n", productName, quantity);
+            System.out.printf("%s\t\t\t\t%d%n", productName, quantity);
         });
         System.out.println("====================================");
-        System.out.printf("총구매액\t\t%d\t%,d%n",
+        System.out.printf("총구매액\t\t\t\t%d\t\t%,d%n",
                 receipt.getPurchasedProducts().values().stream().mapToInt(Integer::intValue).sum(),
                 receipt.getTotalPurchaseAmount());
-        System.out.printf("행사할인\t\t\t-%,d%n", receipt.getTotalDiscountAmount());
-        System.out.printf("멤버십할인\t\t\t-%,d%n", receipt.getMembershipDiscountAmount());
-        System.out.printf("내실돈\t\t\t%,d%n", receipt.getFinalAmount());
+        System.out.printf("행사할인\t\t\t\t\t\t-%,d%n", receipt.getTotalDiscountAmount());
+        System.out.printf("멤버십할인\t\t\t\t\t\t-%,d%n", receipt.getMembershipDiscountAmount());
+        System.out.printf("내실돈\t\t\t\t\t\t%,d%n", receipt.getFinalAmount());
     }
 
     public void showRequestContinueShopping() {
