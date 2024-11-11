@@ -14,6 +14,7 @@ import store.model.Stock;
 import store.model.replyStatus;
 import store.util.file.ProductsFileConverter;
 import store.util.file.PromotionsFileConverter;
+import store.util.message.Error;
 import store.view.InputView;
 import store.view.OutputView;
 
@@ -197,7 +198,7 @@ public class StoreController {
                 }
                 return;
             }
-            reduceGeneralStock(stocks, quantity);
+            reduceStockWithoutPromotion(stocks, quantity);
             return;
         }
         reduceStockWithoutPromotion(stocks, quantity);
@@ -245,17 +246,33 @@ public class StoreController {
 
     private void reduceStockWithoutPromotion(List<Stock> stocks, int quantity) {
         int remainingQuantity = quantity;
+
         for (Stock stock : stocks) {
             if (stock.getPromotion() != null) {
-                continue;
+                int available = stock.getQuantity();
+                int purchasable = Math.min(remainingQuantity, available);
+                stock.reduceStock(purchasable);
+                remainingQuantity -= purchasable;
+                if (remainingQuantity == 0) {
+                    return;
+                }
             }
-            int stockQuantity = stock.getQuantity();
-            int purchasable = Math.min(remainingQuantity, stockQuantity);
-            stock.reduceStock(purchasable);
-            remainingQuantity -= purchasable;
-            if (remainingQuantity == 0) {
-                break;
+        }
+
+        for (Stock stock : stocks) {
+            if (stock.getPromotion() == null) {
+                int available = stock.getQuantity();
+                int purchasable = Math.min(remainingQuantity, available);
+                stock.reduceStock(purchasable);
+                remainingQuantity -= purchasable;
+                if (remainingQuantity == 0) {
+                    return;
+                }
             }
+        }
+
+        if (remainingQuantity > 0) {
+            throw new IllegalArgumentException(Error.ERROR_QUANTITY_EXCEEDS_STOCK.getDescription());
         }
     }
 
@@ -267,5 +284,4 @@ public class StoreController {
         }
         return false;
     }
-
 }
