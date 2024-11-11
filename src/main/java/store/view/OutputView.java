@@ -39,7 +39,7 @@ public class OutputView {
                 nonDiscountedQuantity);
     }
 
-    public void showPromotionAdditional(String productName, int additionalQuantity) {
+    public void showAdditionalPromotion(String productName, int additionalQuantity) {
         System.out.println();
         System.out.printf("현재 %s은(는) %d개를 무료로 더 받을 수 있습니다. 추가하시겠습니까? (Y/N)%n", productName, additionalQuantity);
     }
@@ -51,11 +51,11 @@ public class OutputView {
         receipt.getPurchasedProducts().forEach((productName, quantity) -> {
             int price = receipt.getProductPrices().get(productName);
             int totalPrice = price * quantity;
-            System.out.printf("%s\t\t\t\t%d\t\t%,d%n", productName, quantity, totalPrice);
+            System.out.printf("%s\t\t\t\t\t%d\t\t%,d%n", productName, quantity, totalPrice);
         });
         System.out.println("=============증\t\t정===============");
         receipt.getFreeProducts().forEach((productName, quantity) -> {
-            System.out.printf("%s\t\t\t\t%d%n", productName, quantity);
+            System.out.printf("%s\t\t\t\t\t%d%n", productName, quantity);
         });
         System.out.println("====================================");
         System.out.printf("총구매액\t\t\t\t%d\t\t%,d%n",
