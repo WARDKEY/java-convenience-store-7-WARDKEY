@@ -6,12 +6,8 @@ import store.model.replyStatus;
 
 public class InputView {
 
-    public replyStatus getPromotionReply() {
-        return getYesOrNoInput("[ERROR] 프로모션 추가 여부를 입력해주세요.", "[ERROR] 프로모션 추가 여부는 \"Y\"또는 \"N\"을 입력해주세요.");
-    }
-
-    public replyStatus partialPaymentReply() {
-        return getYesOrNoInput("[ERROR] 일부 수량 결제 여부를 입력해주세요.", "[ERROR] 일부 수량 결제 여부는 \"Y\"또는 \"N\"을 입력해주세요.");
+    public replyStatus invalidReply() {
+        return getYesOrNoInput("[ERROR] 입력이 존재하지 않습니다.", "[ERROR] \"Y\"또는 \"N\"을 입력해주세요.");
     }
 
     public replyStatus getMembershipReply() {

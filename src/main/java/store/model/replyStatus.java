@@ -10,6 +10,7 @@ public enum replyStatus {
         if (input.equals("N")) {
             return N;
         }
-        throw new IllegalArgumentException("[ERROR] \"Y\"또는 \"N\"을 입력해주세요.");
+
+        return null;
     }
 }

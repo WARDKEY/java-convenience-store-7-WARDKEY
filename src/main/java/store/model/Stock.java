@@ -13,13 +13,6 @@ public class Stock {
         this.promotion = promotion;
     }
 
-    private String checkQuantity(String quantity) {
-        if (quantity.equals("0")) {
-            return "재고 없음";
-        }
-        return quantity;
-    }
-
     public void addNameAndPrice(Stock stock, StringBuilder builder) {
         try {
             int price = stock.getPrice();

@@ -23,6 +23,11 @@ public class Promotions {
         }
     }
 
+    public boolean isPromotionProduct(String productName) {
+        return promotions.stream()
+                .anyMatch(discount -> discount.getName().equals(productName));
+    }
+
     public List<Discount> getPromotions() {
         return promotions;
     }

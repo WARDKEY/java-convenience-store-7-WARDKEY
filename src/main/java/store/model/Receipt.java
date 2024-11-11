@@ -10,24 +10,26 @@ public class Receipt {
 
     private int totalPurchaseAmount;
     private int totalDiscountAmount;
+    private int sumNonPromotion;
     private int membershipDiscountAmount;
     private int finalAmount;
 
     public Receipt(Purchase purchase, Products products, Promotions promotions, boolean isMember) {
         this.purchasedProducts = new LinkedHashMap<>();
         this.productPrices = new LinkedHashMap<>();
-        purchase.getPurchases().forEach((k, v) -> {
-            purchasedProducts.put(k, Integer.parseInt(v));
-            productPrices.put(k, findProductPrice(products, k));
+        purchase.getPurchases().forEach((product, price) -> {
+            purchasedProducts.put(product, Integer.parseInt(price));
+            productPrices.put(product, findProductPrice(products, product));
         });
         this.freeProducts = purchase.getFreeProducts();
         this.isMember = isMember;
-        calculateAmounts();
+        calculateAmounts(promotions);
     }
 
-    private void calculateAmounts() {
+    private void calculateAmounts(Promotions promotions) {
         calculateTotalPurchaseAmount();
         calculateTotalDiscountAmount();
+        calculateSumNonPromotion(promotions);
         calculateMembershipDiscountAmount();
         calculateFinalAmount();
     }
@@ -54,16 +56,24 @@ public class Receipt {
                 .sum();
     }
 
+    private void calculateSumNonPromotion(Promotions promotions) {
+        sumNonPromotion = purchasedProducts.entrySet().stream()
+                .filter(entry -> !promotions.isPromotionProduct(entry.getKey()))
+                .mapToInt(entry -> {
+                    String productName = entry.getKey();
+                    int quantity = entry.getValue();
+                    int price = productPrices.get(productName);
+                    return price * quantity;
+                })
+                .sum();
+    }
+
     private void calculateMembershipDiscountAmount() {
         if (!isMember) {
             membershipDiscountAmount = 0;
             return;
         }
-
-        int amountAfterPromotion = totalPurchaseAmount - totalDiscountAmount;
-
-        membershipDiscountAmount = (int) ((amountAfterPromotion) * 0.3);
-
+        membershipDiscountAmount = (int) (sumNonPromotion * 0.3);
         if (membershipDiscountAmount > 8000) {
             membershipDiscountAmount = 8000;
         }
@@ -99,6 +109,10 @@ public class Receipt {
 
     public int getTotalDiscountAmount() {
         return totalDiscountAmount;
+    }
+
+    public int getSumNonPromotion() {
+        return sumNonPromotion;
     }
 
     public int getMembershipDiscountAmount() {
