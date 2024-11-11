@@ -28,8 +28,4 @@ public class Promotions {
                 .anyMatch(stock -> stock.getPromotion() != null && promotions.stream()
                         .anyMatch(discount -> discount.getName().equals(stock.getPromotion())));
     }
-
-    public List<Discount> getPromotions() {
-        return promotions;
-    }
 }

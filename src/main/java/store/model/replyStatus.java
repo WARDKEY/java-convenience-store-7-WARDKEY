@@ -10,7 +10,6 @@ public enum replyStatus {
         if (input.equals("N")) {
             return N;
         }
-
         return null;
     }
 }

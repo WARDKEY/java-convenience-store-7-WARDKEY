@@ -3,6 +3,7 @@ package store.model;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
+import store.util.message.Error;
 
 public class Purchase {
     private final LinkedHashMap<String, String> purchases;
@@ -28,13 +29,13 @@ public class Purchase {
 
     private void hasNotPurchase(String purchase) {
         if (purchase == null || purchase.isBlank()) {
-            throw new IllegalArgumentException("[ERROR] 상품을 입력해주세요.");
+            throw new IllegalArgumentException(Error.ERROR_INVALID_INPUT.getDescription());
         }
     }
 
     private void doseNotEnterPurchase(String purchase) {
         if (purchase.endsWith(",")) {
-            throw new IllegalArgumentException("[ERROR] 상품을 이어서 입력해주세요.");
+            throw new IllegalArgumentException(Error.ERROR_INVALID_FORMAT.getDescription());
         }
     }
 
@@ -51,17 +52,17 @@ public class Purchase {
 
     private void doseNotStartAndEndDelimiter(String purchaseProduct) {
         if (!(purchaseProduct.startsWith("[") && purchaseProduct.endsWith("]"))) {
-            throw new IllegalArgumentException("[ERROR] 올바르지 않은 형식으로 입력했습니다.");
+            throw new IllegalArgumentException(Error.ERROR_INVALID_FORMAT.getDescription());
         }
     }
 
     private void inValidDelimiter(String purchaseProduct) {
         if (!purchaseProduct.contains("-")) {
-            throw new IllegalArgumentException("[ERROR] 올바르지 않은 형식으로 입력했습니다.");
+            throw new IllegalArgumentException(Error.ERROR_INVALID_FORMAT.getDescription());
         }
 
         if (purchaseProduct.indexOf("-") != purchaseProduct.lastIndexOf("-")) {
-            throw new IllegalArgumentException("[ERROR] 올바르지 않은 형식으로 입력했습니다.");
+            throw new IllegalArgumentException(Error.ERROR_INVALID_FORMAT.getDescription());
         }
 
     }

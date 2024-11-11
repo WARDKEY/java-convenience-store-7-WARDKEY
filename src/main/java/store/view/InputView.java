@@ -2,20 +2,21 @@ package store.view;
 
 import camp.nextstep.edu.missionutils.Console;
 import store.model.replyStatus;
+import store.util.message.Error;
 
 
 public class InputView {
 
     public replyStatus invalidReply() {
-        return getYesOrNoInput("[ERROR] 입력이 존재하지 않습니다.", "[ERROR] \"Y\"또는 \"N\"을 입력해주세요.");
+        return getYesOrNoInput(Error.ERROR_INVALID_INPUT.getDescription(), Error.ERROR_INVALID_INPUT.getDescription());
     }
 
     public replyStatus getMembershipReply() {
-        return getYesOrNoInput("[ERROR] 멤버십 할인 여부를 입력해주세요.", "[ERROR] 멤버십 할인 여부는 \"Y\"또는 \"N\"을 입력해주세요.");
+        return getYesOrNoInput(Error.ERROR_INVALID_INPUT.getDescription(), Error.ERROR_INVALID_INPUT.getDescription());
     }
 
     public replyStatus getContinueShoppingReply() {
-        return getYesOrNoInput("[ERROR] 추가 구매 여부를 입력해주세요.", "[ERROR] 추가 구매 여부는 \"Y\"또는 \"N\"을 입력해주세요.");
+        return getYesOrNoInput(Error.ERROR_INVALID_INPUT.getDescription(), Error.ERROR_INVALID_INPUT.getDescription());
     }
 
     private replyStatus getYesOrNoInput(String blankMessage, String invalidMessage) {

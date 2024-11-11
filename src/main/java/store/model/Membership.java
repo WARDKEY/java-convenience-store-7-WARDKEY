@@ -7,10 +7,6 @@ public class Membership {
         this.membershipStatus = membershipStatus;
     }
 
-    public replyStatus getMembershipStatus() {
-        return membershipStatus;
-    }
-
     public boolean isMember() {
         return membershipStatus == replyStatus.Y;
     }

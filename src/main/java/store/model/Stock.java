@@ -1,5 +1,7 @@
 package store.model;
 
+import store.util.message.Error;
+
 public class Stock {
     private final String name;
     private final int price;
@@ -27,7 +29,7 @@ public class Stock {
             builder.append("- ").append(stock.getName()).append(" ")
                     .append(String.format("%,d원", price)).append(" ");
         } catch (NumberFormatException e) {
-            System.out.println("가격 형식이 잘못되었습니다 : " + stock.getPrice());
+            System.out.println(Error.ERROR_INVALID_INPUT);
         }
     }
 
@@ -38,7 +40,7 @@ public class Stock {
 
     public void reduceStock(int requestedQuantity) {
         if (quantity < requestedQuantity) {
-            throw new IllegalArgumentException("[ERROR] 재고 수량을 초과하여 구매할 수 없습니다.");
+            throw new IllegalArgumentException(Error.ERROR_INVALID_INPUT.getDescription());
         }
         quantity -= requestedQuantity;
     }

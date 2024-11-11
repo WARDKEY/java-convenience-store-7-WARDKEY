@@ -1,6 +1,7 @@
 package store.model;
 
 import java.util.List;
+import store.util.message.Error;
 
 public class Products {
     private final List<Stock> products;
@@ -26,19 +27,19 @@ public class Products {
 
     private void isBlankProductName(String productName) {
         if (productName.isBlank()) {
-            throw new IllegalArgumentException("[ERROR] 상품을 입력해주세요.");
+            throw new IllegalArgumentException(Error.ERROR_INVALID_FORMAT.getDescription());
         }
     }
 
     private void isBlankProductQuantity(String productQuantity) {
         if (productQuantity.isBlank()) {
-            throw new IllegalArgumentException("[ERROR] 수량을 입력해주세요.");
+            throw new IllegalArgumentException(Error.ERROR_INVALID_FORMAT.getDescription());
         }
     }
 
     private void isZeroQuantity(int quantity) {
         if (quantity == 0) {
-            throw new IllegalArgumentException("[ERROR] 수량을 입력해주세요.");
+            throw new IllegalArgumentException(Error.ERROR_INVALID_FORMAT.getDescription());
         }
     }
 
@@ -47,7 +48,7 @@ public class Products {
                 .anyMatch(stock -> stock.getName().equals(productName));
 
         if (!productExists) {
-            throw new IllegalArgumentException("[ERROR] 존재하지 않는 상품입니다. 다시 입력해 주세요.");
+            throw new IllegalArgumentException(Error.ERROR_PRODUCT_NOT_EXIST.getDescription());
         }
     }
 
@@ -58,7 +59,7 @@ public class Products {
                 .sum();
 
         if (quantity > totalQuantity) {
-            throw new IllegalArgumentException("[ERROR] 재고 수량을 초과하여 구매할 수 없습니다. 다시 입력해 주세요.");
+            throw new IllegalArgumentException(Error.ERROR_QUANTITY_EXCEEDS_STOCK.getDescription());
         }
     }
 
