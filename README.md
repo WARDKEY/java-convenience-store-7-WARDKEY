@@ -135,47 +135,46 @@
 
 - 고객 구매 입력
     - [x] 고객 구매 입력 시 개별 상품이 "\["로 시작하거나 "\]"로 끝나지 않는 경우
-        - IllegalArgumentException("[ERROR] 올바르지 않은 형식으로 입력했습니다.");를 터트리고 입력을 다시 받는다.
+        - IllegalArgumentException("[ERROR] 올바르지 않은 형식으로 입력했습니다. 다시 입력해 주세요.");를 터트리고 입력을 다시 받는다.
     - [x] 고객 구매 입력 시 "-"를 입력하지 않은 경우
-        - IllegalArgumentException("[ERROR] 올바르지 않은 형식으로 입력했습니다.");를 터트리고 입력을 다시 받는다.
+        - IllegalArgumentException("[ERROR] 올바르지 않은 형식으로 입력했습니다. 다시 입력해 주세요.");를 터트리고 입력을 다시 받는다.
     - [x] 고객 구매 입력 시 "-"를 두번 이상 입력한 않은 경우
-        - IllegalArgumentException("[ERROR] 올바르지 않은 형식으로 입력했습니다.");를 터트리고 입력을 다시 받는다.
+        - IllegalArgumentException("[ERROR] 올바르지 않은 형식으로 입력했습니다. 다시 입력해 주세요.");를 터트리고 입력을 다시 받는다.
     - [x] 고객 구매 입력 시 ","로 끝나는 경우
-        - IllegalArgumentException("[ERROR] 상품을 이어서 입력해주세요.");를 터트리고 입력을 다시 받는다.
+        - IllegalArgumentException("[ERROR] 올바르지 않은 형식으로 입력했습니다. 다시 입력해 주세요.");를 터트리고 입력을 다시 받는다.
     - [x] 고객 구매 입력 시 입력을 하지 않은 겨우
-        - IllegalArgumentException("[ERROR] 상품을 입력해주세요.");를 터트리고 입력을 다시 받는다.
+        - IllegalArgumentException("[ERROR] 잘못된 입력입니다. 다시 입력해 주세요.");를 터트리고 입력을 다시 받는다.
     - [x] 고객 구매 입력 시 상품명이 비었을 경우
-        - IllegalArgumentException("[ERROR] 상품을 입력해주세요.");를 터트리고 입력을 다시 받는다.
+        - IllegalArgumentException("[ERROR] 올바르지 않은 형식으로 입력했습니다. 다시 입력해 주세요.");를 터트리고 입력을 다시 받는다.
     - [x] 고객 구매 입력 시 수량이 비었거나 0인 경우
-        - IllegalArgumentException("[ERROR] 수량을 입력해주세요.");를 터트리고 입력을 다시 받는다.
+        - IllegalArgumentException("[ERROR] 올바르지 않은 형식으로 입력했습니다. 다시 입력해 주세요.");를 터트리고 입력을 다시 받는다.
     - [x] 고객 구매 입력 시 재고에 없는 상품인 경우
         - IllegalArgumentException("[ERROR] 존재하지 않는 상품입니다. 다시 입력해 주세요.");를 터트리고 입력을 다시 받는다.
     - [x] 고객 구매 입력 시 재고 수량보다 많은 경우
-        - IllegalArgumentException("[ERROR] 재고 수량을 초과하여 구매할 수 없습니다.");를 터트리고 고객입력을 다시 받는다.
+        - IllegalArgumentException("[ERROR] 잘못된 입력입니다. 다시 입력해 주세요.");를 터트리고 고객입력을 다시 받는다.
     - [x] 고객 구매 입력 시 상품 개수를 숫자로 입력하지 않은 경우
-        - NumberFormatException("[ERROR] 상품 개수는 숫자를 입력해주세요.");를 터트리고 입력을 다시 받는다.
+        - NumberFormatException("[ERROR] 올바르지 않은 형식으로 입력했습니다. 다시 입력해 주세요.");를 터트리고 입력을 다시 받는다.
 
 
 - 프로모션 수량 추가 여부 입력 및 일부 수량 결제 여부 입력
     - [x] "Y"또는 "N"이 아닌 다른 값을 입력한 경우
-        - IllegalArgumentException("[ERROR] "Y"또는 "N"을 입력해주세요.");를 터트리고 입력을 다시 받는다.
+        - IllegalArgumentException("[ERROR] 잘못된 입력입니다. 다시 입력해 주세요.");를 터트리고 입력을 다시 받는다.
     - [x] 공백을 입력한 경우
-        - IllegalArgumentException("[ERROR] 입력이 존재하지 않습니다.");를 터트리고 입력을 다시 받는다.
+        - IllegalArgumentException("[ERROR] 잘못된 입력입니다. 다시 입력해 주세요.");를 터트리고 입력을 다시 받는다.
 
 
 - 멤버십 할인 여부 입력
     - [x] 멤버십 할인 여부 입력 시 "Y"또는 "N"이 아닌 다른 값을 입력한 경우
-        - IllegalArgumentException("[ERROR] 멤버십 할인 여부는 "Y"또는 "N"을 입력해주세요.");를 터트리고 입력을 다시 받는다.
+        - IllegalArgumentException("[ERROR] 잘못된 입력입니다. 다시 입력해 주세요.");를 터트리고 입력을 다시 받는다.
     - [x] 멤버십 할인 여부 입력 시 공백을 입력한 경우
-        - IllegalArgumentException("[ERROR] 멤버십 할인 여부를 입력해주세요.");를 터트리고 입력을 다시 받는다.
+        - IllegalArgumentException("[ERROR] 잘못된 입력입니다. 다시 입력해 주세요.");를 터트리고 입력을 다시 받는다.
 
 
 - 추가 구매 여부 입력
     - [x] 추가 구매 여부 입력 시 "Y"또는 "N"이 아닌 다른 값을 입력한 경우
-        - IllegalArgumentException("[ERROR] 추가 구매 여부는 "Y"또는 "N"을 입력해주세요.");를 터트리고 입력을 다시 받는다.
+        - IllegalArgumentException("[ERROR] 잘못된 입력입니다. 다시 입력해 주세요.");를 터트리고 입력을 다시 받는다.
     - [x] 추가 구매 여부 입력 시 공백을 입력한 경우
-        - IllegalArgumentException("[ERROR] 추가 구매 여부를 입력해주세요.");를 터트리고 입력을 다시 받는다.
-
+        - IllegalArgumentException("[ERROR] 잘못된 입력입니다. 다시 입력해 주세요.");를 터트리고 입력을 다시 받는다.
 
 ---
 
@@ -263,7 +262,7 @@ Y
 
 멤버십 할인을 받으시겠습니까? (Y/N)
 A
-[ERROR] 멤버십 할인 여부는 "Y"또는 "N"을 입력해주세요.
+[ERROR] 잘못된 입력입니다. 다시 입력해 주세요.
 Y
 
 ==============W 편의점================
